@@ -223,31 +223,17 @@ export function DashboardComponent() {
                 ) : (
                   <div className="overflow-x-auto relative min-h-[400px]">
                     {/* Overlay for blocked content visual */}
-                    {!isPaid && leads.length > 3 && (
-                      <div className="absolute inset-x-0 bottom-0 top-[200px] z-10 bg-gradient-to-b from-transparent to-slate-900/90 pointer-events-none" />
-                    )}
+
 
                     <LeadsTable
                       leads={leads}
                       onRowClick={handleRowClick}
                       onStatusChange={handleStatusChange}
                       isPaid={isPaid}
+                      onUnlock={() => setShowCheckout(true)}
                     />
 
-                    {!isPaid && leads.length > 3 && (
-                      <div className="absolute bottom-8 left-0 right-0 z-20 flex justify-center p-4">
-                        <div className="bg-slate-900/90 backdrop-blur-md p-6 rounded-2xl border border-white/10 shadow-2xl max-w-sm text-center">
-                          <h3 className="text-white font-bold text-lg mb-2">Unlock All {leads.length} Leads</h3>
-                          <p className="text-slate-400 text-sm mb-4">Upgrade to premium to view all verified research data.</p>
-                          <button
-                            onClick={() => setShowCheckout(true)}
-                            className="w-full py-3 px-6 bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:from-violet-400 hover:to-fuchsia-400 text-white font-semibold rounded-xl text-sm transition-all shadow-lg hover:shadow-violet-500/25"
-                          >
-                            Unlock Now - $99.00
-                          </button>
-                        </div>
-                      </div>
-                    )}
+
                   </div>
                 )}
               </div>

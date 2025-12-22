@@ -15,8 +15,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Lead Approval Dashboard",
-  description: "Review and approve leads for outreach",
+  title: "ResearchScoutAI",
+  description: "Premium lead research and approval",
 };
 
 export default function RootLayout({

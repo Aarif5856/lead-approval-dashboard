@@ -8,6 +8,7 @@ import { SidePanel } from './SidePanel';
 import { DownloadButton } from './DownloadButton';
 import { EmptyState } from './EmptyState';
 import { SkeletonLoader } from './SkeletonLoader';
+import { PayPalCheckout } from './PayPalCheckout';
 
 interface CSVRow {
   Name: string;
@@ -44,6 +45,8 @@ export function DashboardComponent() {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isPaid, setIsPaid] = useState(false);
+  const [showCheckout, setShowCheckout] = useState(false);
   const initialLoadDone = useRef(false);
 
   // Load leads from localStorage or fetch from CSV on initial mount
@@ -108,6 +111,15 @@ export function DashboardComponent() {
   }, [leads]);
 
   const handleRowClick = (lead: Lead) => {
+    // Find index of lead
+    const index = leads.findIndex(l => l.id === lead.id);
+
+    // If not paid and index >= 3, show checkout instead of panel
+    if (!isPaid && index >= 3) {
+      setShowCheckout(true);
+      return;
+    }
+
     setSelectedLead(lead);
   };
 
@@ -149,10 +161,10 @@ export function DashboardComponent() {
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 sm:gap-6 mb-8 sm:mb-10">
                   <div>
                     <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-2 sm:mb-3 tracking-tight">
-                      Lead Approval
+                      ResearchScoutAI
                     </h1>
                     <p className="font-body text-slate-400 text-base sm:text-lg">
-                      Review and approve leads for personalized outreach
+                      Unlock premium lead research and approvals
                     </p>
                   </div>
                   <DownloadButton leads={leads} />
@@ -205,18 +217,61 @@ export function DashboardComponent() {
               </header>
 
               {/* Table or Empty State */}
-              <div className="bento-item rounded-2xl sm:rounded-3xl overflow-hidden animate-fade-in stagger-4">
+              <div className="bento-item rounded-2xl sm:rounded-3xl overflow-hidden animate-fade-in stagger-4 relative">
                 {allProcessed ? (
                   <EmptyState />
                 ) : (
-                  <div className="overflow-x-auto">
-                    <LeadsTable leads={leads} onRowClick={handleRowClick} onStatusChange={handleStatusChange} />
+                  <div className="overflow-x-auto relative min-h-[400px]">
+                    {/* Overlay for blocked content visual */}
+                    {!isPaid && leads.length > 3 && (
+                      <div className="absolute inset-x-0 bottom-0 top-[200px] z-10 bg-gradient-to-b from-transparent to-slate-900/90 pointer-events-none" />
+                    )}
+
+                    <LeadsTable
+                      leads={leads}
+                      onRowClick={handleRowClick}
+                      onStatusChange={handleStatusChange}
+                      isPaid={isPaid}
+                    />
+
+                    {!isPaid && leads.length > 3 && (
+                      <div className="absolute bottom-8 left-0 right-0 z-20 flex justify-center p-4">
+                        <div className="bg-slate-900/90 backdrop-blur-md p-6 rounded-2xl border border-white/10 shadow-2xl max-w-sm text-center">
+                          <h3 className="text-white font-bold text-lg mb-2">Unlock All {leads.length} Leads</h3>
+                          <p className="text-slate-400 text-sm mb-4">Upgrade to premium to view all verified research data.</p>
+                          <button
+                            onClick={() => setShowCheckout(true)}
+                            className="w-full py-3 px-6 bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:from-violet-400 hover:to-fuchsia-400 text-white font-semibold rounded-xl text-sm transition-all shadow-lg hover:shadow-violet-500/25"
+                          >
+                            Unlock Now - $99.00
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
             </>
           )}
         </div>
+
+        {/* PayPal Checkout Modal */}
+        {showCheckout && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+            <div className="relative w-full max-w-md">
+              <button
+                onClick={() => setShowCheckout(false)}
+                className="absolute -top-12 right-0 text-white/70 hover:text-white"
+              >
+                Close
+              </button>
+              <PayPalCheckout onSuccess={() => {
+                setIsPaid(true);
+                setShowCheckout(false);
+              }} />
+            </div>
+          </div>
+        )}
 
         {/* Side Panel */}
         <SidePanel

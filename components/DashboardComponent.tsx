@@ -160,9 +160,7 @@ export function DashboardComponent() {
               <header className="mb-8 sm:mb-10 lg:mb-12 animate-fade-in">
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 sm:gap-6 mb-8 sm:mb-10">
                   <div>
-                    <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-2 sm:mb-3 tracking-tight">
-                      ResearchScoutAI
-                    </h1>
+                    <img src="/logo.svg" alt="ResearchScoutAI" className="h-10 mb-4" />
                     <p className="font-body text-slate-400 text-base sm:text-lg">
                       Unlock premium lead research and approvals
                     </p>

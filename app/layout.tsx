@@ -16,8 +16,21 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "ResearchScoutAI",
-  description: "Premium lead research and approval",
+  title: "ResearchScoutAI - Premium SaaS Founder Leads",
+  description: "Get instant access to 50 verified SaaS founders. Includes personal emails, LinkedIn profiles, and AI-generated personalized openers for high-conversion outreach.",
+  keywords: ["SaaS leads", "B2B lead generation", "founder emails", "market research", "verified leads", "outreach dataset"],
+  openGraph: {
+    title: "ResearchScoutAI - 50 Verified SaaS Leads",
+    description: "Unlock premium lead research. 50 verified SaaS founders with personalized openers ready for your outreach.",
+    type: "website",
+    locale: "en_US",
+    siteName: "ResearchScoutAI",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ResearchScoutAI - Premium SaaS Leads",
+    description: "Instant access to 50 verified SaaS founders for your next outreach campaign.",
+  },
   icons: {
     icon: '/icon.svg',
   },

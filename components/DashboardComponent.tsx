@@ -9,6 +9,7 @@ import { DownloadButton } from './DownloadButton';
 import { EmptyState } from './EmptyState';
 import { SkeletonLoader } from './SkeletonLoader';
 import { PayPalCheckout } from './PayPalCheckout';
+import { ShareButton } from './ShareButton';
 
 interface CSVRow {
   Name: string;
@@ -165,7 +166,10 @@ export function DashboardComponent() {
                       Unlock premium lead research and approvals
                     </p>
                   </div>
-                  <DownloadButton leads={leads} />
+                  <div className="flex flex-wrap items-center gap-3">
+                    <ShareButton />
+                    <DownloadButton leads={leads} />
+                  </div>
                 </div>
 
                 {/* Bento Grid Metrics - Stack on mobile */}

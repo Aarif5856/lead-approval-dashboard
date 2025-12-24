@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import Papa from 'papaparse';
+import confetti from 'canvas-confetti';
 import { Lead, LeadStatus } from '@/types/lead';
 import { LeadsTable } from './LeadsTable';
 import { SidePanel } from './SidePanel';
@@ -49,6 +50,16 @@ export function DashboardComponent() {
   const [isPaid, setIsPaid] = useState(false);
   const [showCheckout, setShowCheckout] = useState(false);
   const initialLoadDone = useRef(false);
+
+  // Check for paid status on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const paidStatus = localStorage.getItem('lead-approval-paid');
+      if (paidStatus === 'true') {
+        setIsPaid(true);
+      }
+    }
+  }, []);
 
   // Load leads from localStorage or fetch from CSV on initial mount
   useEffect(() => {
@@ -256,6 +267,15 @@ export function DashboardComponent() {
               <PayPalCheckout onSuccess={() => {
                 setIsPaid(true);
                 setShowCheckout(false);
+                if (typeof window !== 'undefined') {
+                  localStorage.setItem('lead-approval-paid', 'true');
+                  confetti({
+                    particleCount: 150,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#a3e635', '#34d399', '#f472b6', '#60a5fa']
+                  });
+                }
               }} />
             </div>
           </div>
